@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LSA Rights Library", "LSA Rights Library\LSA Rights Library.csproj", "{2AC051B4-35AA-4047-93D8-3F918C32AC8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRightsApp", "ConsoleApplication2\TestRightsApp.csproj", "{E6CB2CB3-919D-4973-9D2A-A75A58145CC4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2AC051B4-35AA-4047-93D8-3F918C32AC8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AC051B4-35AA-4047-93D8-3F918C32AC8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AC051B4-35AA-4047-93D8-3F918C32AC8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AC051B4-35AA-4047-93D8-3F918C32AC8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6CB2CB3-919D-4973-9D2A-A75A58145CC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6CB2CB3-919D-4973-9D2A-A75A58145CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6CB2CB3-919D-4973-9D2A-A75A58145CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6CB2CB3-919D-4973-9D2A-A75A58145CC4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {79FB06E6-AF1E-454C-B9C8-2E7BB87EF0A9}
+	EndGlobalSection
+EndGlobal
