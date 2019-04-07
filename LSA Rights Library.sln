@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LSA Rights Library", "LSA Rights Library\LSA Rights Library.csproj", "{2AC051B4-35AA-4047-93D8-3F918C32AC8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRightsApp", "ConsoleApplication2\TestRightsApp.csproj", "{E6CB2CB3-919D-4973-9D2A-A75A58145CC4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRightsApp", "Test Rights App\TestRightsApp.csproj", "{E6CB2CB3-919D-4973-9D2A-A75A58145CC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
