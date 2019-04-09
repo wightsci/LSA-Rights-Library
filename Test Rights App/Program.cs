@@ -8,6 +8,8 @@ namespace TestRightsApp
         {
             LocalSecurityAuthorityController obj = new LocalSecurityAuthorityController();
             Console.WriteLine("Users with NT Right 'Interactive Logon'");
+            Console.WriteLine("=======================================");
+            Console.WriteLine();
             System.Collections.Generic.IList<string> interactivelist = obj.GetAccountsWithRights("SeInteractiveLogonRight");
             for (int x = 0; x < interactivelist.Count; x++)
                 {
@@ -16,6 +18,8 @@ namespace TestRightsApp
             Console.ReadKey();
             Console.WriteLine();
             Console.WriteLine("NT Rights for the Local Administrators Group");
+            Console.WriteLine("============================================");
+            Console.WriteLine();
             System.Collections.Generic.IList<string> administratorlist = obj.GetRights("Administrators");
             for (int x = 0; x < administratorlist.Count; x++)
                 {
