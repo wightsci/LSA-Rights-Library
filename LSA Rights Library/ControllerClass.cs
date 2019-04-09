@@ -38,22 +38,22 @@ namespace LSAController
         );
 
         private const uint STATUS_ACCESS_DENIED = 0xc0000022;
-        private const uint STATUS_INSUFFICIENT_RESOURCES = 0xc000009a;
-        private const uint STATUS_NO_MEMORY = 0xc0000017;
-        private const uint STATUS_NO_MORE_ENTRIES = 0xc000001A;
+        private const uint STATUS_INSUFFICIENT_RESOURCES = 0xc000009a;
+        private const uint STATUS_NO_MEMORY = 0xc0000017;
+        private const uint STATUS_NO_MORE_ENTRIES = 0xc000001A;
 
-        private enum SID_NAME_USE 
-        {
-          SidTypeUser = 1,
-          SidTypeGroup,
-          SidTypeDomain,
-          SidTypeAlias,
-          SidTypeWellKnownGroup,
-          SidTypeDeletedAccount,
-          SidTypeInvalid,
-          SidTypeUnknown,
-          SidTypeComputer
-        }
+        private enum SID_NAME_USE
+        {
+            SidTypeUser = 1,
+            SidTypeGroup,
+            SidTypeDomain,
+            SidTypeAlias,
+            SidTypeWellKnownGroup,
+            SidTypeDeletedAccount,
+            SidTypeInvalid,
+            SidTypeUnknown,
+            SidTypeComputer
+        }
 
         [StructLayout(LayoutKind.Sequential)]
         struct LSA_ENUMERATION_INFORMATION
@@ -98,17 +98,7 @@ namespace LSAController
             POLICY_NOTIFICATION = 0x00001000L
         }
 
-        static LSA_UNICODE_STRING InitLsaString(string lsaString)
-        {
-            // Unicode strings max. 32KB
-            if (lsaString.Length > 0x7ffe)
-                throw new ArgumentException("String too long");
-            LSA_UNICODE_STRING lus = new LSA_UNICODE_STRING();
-            lus.Buffer = Marshal.StringToHGlobalUni(lsaString);
-            lus.Length = (ushort)(lsaString.Length * sizeof(char));
-            lus.MaximumLength = (ushort)(lus.Length + sizeof(char));
-            return lus;
-        }
+
 
         // Local security rights managed by the Local Security Authority
         // See https://msdn.microsoft.com/en-us/library/windows/desktop/bb530716(v=vs.85).aspx
@@ -206,9 +196,10 @@ namespace LSAController
         private static extern uint LsaEnumerateAccountsWithUserRight(IntPtr PolicyHandle, LSA_UNICODE_STRING[] UserRights, out IntPtr EnumerationBuffer, out long CountReturned);
 
         [DllImport("advapi32.dll", SetLastError = true, PreserveSig = true)]
-        private static extern uint LsaRemoveAccountRights(IntPtr PolicyHandle, IntPtr AccountSid, [MarshalAs(UnmanagedType.U1)] bool AllRights, LSA_UNICODE_STRING[] UserRights, uint CountOfRights);
+        private static extern uint LsaRemoveAccountRights(IntPtr PolicyHandle, IntPtr AccountSid, [MarshalAs(UnmanagedType.U1)]bool AllRights, LSA_UNICODE_STRING[] UserRights, uint CountOfRights);
 
-        private static IntPtr GetAccountSID(string accountName) {
+        private static IntPtr GetAccountSID(string accountName)
+        {
             IntPtr pSid = IntPtr.Zero;
             SecurityIdentifier userSid = (SecurityIdentifier)(new System.Security.Principal.NTAccount(string.Empty, accountName)).Translate(typeof(SecurityIdentifier));
             Byte[] buffer = new Byte[userSid.BinaryLength];
@@ -218,16 +209,17 @@ namespace LSAController
             return pSid;
         }
 
-        private static string GetSIDAccount(IntPtr sid) {
+        private static string GetSIDAccount(IntPtr sid)
+        {
             string theAccountName;
             try
-                    {
-                        theAccountName = (new SecurityIdentifier(sid)).Translate(typeof(NTAccount)).ToString();
-                    }
+            {
+                theAccountName = (new SecurityIdentifier(sid)).Translate(typeof(NTAccount)).ToString();
+            }
             catch (System.Security.Principal.IdentityNotMappedException)
-                    {
-                        theAccountName = (new SecurityIdentifier(sid)).ToString();
-                    }
+            {
+                theAccountName = (new SecurityIdentifier(sid)).ToString();
+            }
             return theAccountName;
         }
 
@@ -240,7 +232,7 @@ namespace LSAController
             IntPtr pSid = IntPtr.Zero;
 
             pSid = GetAccountSID(accountName);
-            
+
             //if (!LookupAccountName(string.Empty, accountName, sid, ref sidSize, domainName, ref nameSize, ref accountType))
             //{
             //    winErrorCode = GetLastError();
@@ -258,10 +250,10 @@ namespace LSAController
 
             uint policyStatus = LsaOpenPolicy(ref systemName, ref objectAttributes, Access, out policyHandle);
             winErrorCode = LsaNtStatusToWinError(policyStatus);
-
             if (winErrorCode != 0)
             {
                 errorMessage = string.Format("OpenPolicy failed: {0}.", winErrorCode);
+                throw new ApplicationException(string.Format("Error occured in LSA, error code {0}, detail: {1}", winErrorCode, errorMessage));
             }
             else
             {
@@ -269,7 +261,19 @@ namespace LSAController
                 winErrorCode = LsaNtStatusToWinError(result);
                 if (winErrorCode != 0)
                 {
-                    errorMessage = string.Format("LsaEnumerateAccountRights failed: {0}", winErrorCode);
+                    switch (winErrorCode)
+                    {
+                        case 2:
+                            errorMessage = string.Format("No directly assigned privilege for account {0}. (2)", accountName);
+                            break;
+                        case 1332:
+                            errorMessage = string.Format("Cannot find SID for account {0}. (1332)", accountName);
+                            break;
+                        default:
+                            errorMessage = string.Format("LsaEnumerateAccountRights failed: {0}", winErrorCode);
+                            break;
+                    }
+                    throw new ApplicationException(string.Format("Error occured in LSA, error code {0}, detail: {1}", winErrorCode, errorMessage));
                 }
                 else
                 {
@@ -284,26 +288,9 @@ namespace LSAController
                         ptr += Marshal.SizeOf(userRight);
                     }
                 }
-                LsaClose(policyHandle);
             }
             ///FreeSid(sid);
-            //}
-            if (winErrorCode > 0)
-            {
-                switch (winErrorCode)
-                {
-                    case 2:
-                        errorMessage = string.Format("No directly assigned privilege for account {0}. (2)", accountName);
-                        break;
-                    case 1332:
-                        errorMessage = string.Format("Cannot find SID for account {0}. (1332)", accountName);
-                        break;
-                    default:
-                        ;
-                        break;
-                }
-                throw new ApplicationException(string.Format("Error occured in LSA, error code {0}, detail: {1}", winErrorCode, errorMessage));
-            }
+            LsaClose(policyHandle);
             return rights;
         }
 
@@ -325,7 +312,7 @@ namespace LSAController
 
             uint resultPolicy = LsaOpenPolicy(ref systemName, ref objectAttributes, Access, out policyHandle);
             winErrorCode = LsaNtStatusToWinError(resultPolicy);
-           
+
             if (winErrorCode != 0)
             {
                 errorMessage = string.Format("OpenPolicy failed: {0} ", winErrorCode);
@@ -357,7 +344,7 @@ namespace LSAController
             }
             else
             {
-                 LSA_ENUMERATION_INFORMATION[] LsaInfo = new LSA_ENUMERATION_INFORMATION[countReturned];
+                LSA_ENUMERATION_INFORMATION[] LsaInfo = new LSA_ENUMERATION_INFORMATION[countReturned];
                 for (long i = 0, elemOffs = (Int64)enumerationBuffer; i < countReturned; i++)
                 {
                     LsaInfo[i] = (LSA_ENUMERATION_INFORMATION)Marshal.PtrToStructure(
@@ -380,10 +367,10 @@ namespace LSAController
                 return accountNames;
             }
         }
-           
 
-        // Adds a privilege to an account
-        public void SetRight(string accountName, string privilegeName)
+
+        // Adds a privilege to an account
+        public void SetRight(string accountName, string privilegeName)
         {
             long winErrorCode = 0;
             string errorMessage = string.Empty;
@@ -484,7 +471,7 @@ namespace LSAController
                     userRights[0].Length = (UInt16)(privilegeName.Length * UnicodeEncoding.CharSize);
                     userRights[0].MaximumLength = (UInt16)((privilegeName.Length + 1) * UnicodeEncoding.CharSize);
                     /// Only one right, to make it simple.
-                    uint res = LsaRemoveAccountRights(policyHandle, sid, false, userRights, 1);            
+                    uint res = LsaRemoveAccountRights(policyHandle, sid, false, userRights, 1);
                     winErrorCode = LsaNtStatusToWinError(res);
                     if (winErrorCode != 0)
                     {
@@ -523,6 +510,18 @@ namespace LSAController
             newInstance.SecurityQualityOfService = IntPtr.Zero;
 
             return newInstance;
+        }
+
+        static LSA_UNICODE_STRING InitLsaString(string lsaString)
+        {
+            // Unicode strings max. 32KB
+            if (lsaString.Length > 0x7ffe)
+                throw new ArgumentException("String too long");
+            LSA_UNICODE_STRING lus = new LSA_UNICODE_STRING();
+            lus.Buffer = Marshal.StringToHGlobalUni(lsaString);
+            lus.Length = (ushort)(lsaString.Length * sizeof(char));
+            lus.MaximumLength = (ushort)(lus.Length + sizeof(char));
+            return lus;
         }
     }
 }
