@@ -16,7 +16,72 @@ using System.Security.Principal;
 
 namespace LSAController
 {
-    //
+    // Local security rights managed by the Local Security Authority
+    // See https://msdn.microsoft.com/en-us/library/windows/desktop/bb530716(v=vs.85).aspx
+    // See https://msdn.microsoft.com/en-us/library/windows/desktop/bb545671(v=vs.85).aspx
+    public class LocalSecurityAuthorityRights
+    {
+        // Log on as a service right
+        public const string LogonAsService = "SeServiceLogonRight";
+        // Log on as a batch job right
+        public const string LogonAsBatchJob = "SeBatchLogonRight";
+        // Interactive log on right
+        public const string InteractiveLogon = "SeInteractiveLogonRight";
+        // Network log on right
+        public const string NetworkLogon = "SeNetworkLogonRight";
+        // Generate security audit logs right
+        public const string GenerateSecurityAudits = "SeAuditPrivilege";
+        // Backup system right
+        public const string Backup = "SeBackupPrivilege";
+        // Set system time right
+        public const string SetTime = "SeSystemtimePrivilege";
+        // Remote shutdown right
+        public const string RemoteShutdown = "SeRemoteShutdownPrivilege";
+
+
+
+        // Deny log on as a service right
+        public const string DenyLogonAsService = "SeDenyServiceLogonRight";
+        // Deny log on as a batch job right
+        public const string DenyLogonAsBatchJob = "SeDenyBatchLogonRight";
+        // Deny interactive log on right
+        public const string DenyInteractiveLogon = "SeDenyInteractiveLogonRight";
+        // Deny network log on right
+        public const string DenyNetworkLogon = "SeDenyNetworkLogonRight";
+        /*
+         *  
+            SeSecurityPrivilege
+            SeBackupPrivilege
+            SeRestorePrivilege
+            SeSystemtimePrivilege
+            SeShutdownPrivilege
+            SeRemoteShutdownPrivilege
+            SeTakeOwnershipPrivilege
+            SeDebugPrivilege
+            SeSystemEnvironmentPrivilege
+            SeSystemProfilePrivilege
+            SeProfileSingleProcessPrivilege
+            SeIncreaseBasePriorityPrivilege
+            SeLoadDriverPrivilege
+            SeCreatePagefilePrivilege
+            SeIncreaseQuotaPrivilege
+            SeChangeNotifyPrivilege
+            SeUndockPrivilege
+            SeManageVolumePrivilege
+            SeImpersonatePrivilege
+            SeCreateGlobalPrivilege
+            SeTimeZonePrivilege
+            SeCreateSymbolicLinkPrivilege
+            SeInteractiveLogonRight
+            SeNetworkLogonRight
+            SeBatchLogonRight
+            SeRemoteInteractiveLogonRight
+         * 
+         */
+
+    }
+
+    //
     // Provides methods the local security authority which controls user rights. Managed via secpol.msc normally.
     //
     public class LocalSecurityAuthorityController
@@ -96,73 +161,6 @@ namespace LSAController
             POLICY_SERVER_ADMIN = 0x00000400L,
             POLICY_LOOKUP_NAMES = 0x00000800L,
             POLICY_NOTIFICATION = 0x00001000L
-        }
-
-
-
-        // Local security rights managed by the Local Security Authority
-        // See https://msdn.microsoft.com/en-us/library/windows/desktop/bb530716(v=vs.85).aspx
-        // See https://msdn.microsoft.com/en-us/library/windows/desktop/bb545671(v=vs.85).aspx
-        public class LocalSecurityAuthorityRights
-        {
-            // Log on as a service right
-            public const string LogonAsService = "SeServiceLogonRight";
-            // Log on as a batch job right
-            public const string LogonAsBatchJob = "SeBatchLogonRight";
-            // Interactive log on right
-            public const string InteractiveLogon = "SeInteractiveLogonRight";
-            // Network log on right
-            public const string NetworkLogon = "SeNetworkLogonRight";
-            // Generate security audit logs right
-            public const string GenerateSecurityAudits = "SeAuditPrivilege";
-            // Backup system right
-            public const string Backup = "SeBackupPrivilege";
-            // Set system time right
-            public const string SetTime = "SeSystemtimePrivilege";
-            // Remote shutdown right
-            public const string RemoteShutdown = "SeRemoteShutdownPrivilege";
-
-
-
-            // Deny log on as a service right
-            public const string DenyLogonAsService = "SeDenyServiceLogonRight";
-            // Deny log on as a batch job right
-            public const string DenyLogonAsBatchJob = "SeDenyBatchLogonRight";
-            // Deny interactive log on right
-            public const string DenyInteractiveLogon = "SeDenyInteractiveLogonRight";
-            // Deny network log on right
-            public const string DenyNetworkLogon = "SeDenyNetworkLogonRight";
-            /*
-             *  
-                SeSecurityPrivilege
-                SeBackupPrivilege
-                SeRestorePrivilege
-                SeSystemtimePrivilege
-                SeShutdownPrivilege
-                SeRemoteShutdownPrivilege
-                SeTakeOwnershipPrivilege
-                SeDebugPrivilege
-                SeSystemEnvironmentPrivilege
-                SeSystemProfilePrivilege
-                SeProfileSingleProcessPrivilege
-                SeIncreaseBasePriorityPrivilege
-                SeLoadDriverPrivilege
-                SeCreatePagefilePrivilege
-                SeIncreaseQuotaPrivilege
-                SeChangeNotifyPrivilege
-                SeUndockPrivilege
-                SeManageVolumePrivilege
-                SeImpersonatePrivilege
-                SeCreateGlobalPrivilege
-                SeTimeZonePrivilege
-                SeCreateSymbolicLinkPrivilege
-                SeInteractiveLogonRight
-                SeNetworkLogonRight
-                SeBatchLogonRight
-                SeRemoteInteractiveLogonRight
-             * 
-             */
-
         }
 
         [DllImport("advapi32.dll", PreserveSig = true)]
@@ -295,10 +293,10 @@ namespace LSAController
         }
 
         // Lists account with a privilege
-        public IList<string> GetAccountsWithRights(string privilege)
+        public IList<string> GetAccountsWithRight(string privilegeName)
         {
             LSA_UNICODE_STRING[] privileges = new LSA_UNICODE_STRING[1];
-            privileges[0] = InitLsaString(privilege);
+            privileges[0] = InitLsaString(privilegeName);
             IntPtr enumerationBuffer = IntPtr.Zero;
             long countReturned = 0;
             IList<string> accountNames = new List<string>();

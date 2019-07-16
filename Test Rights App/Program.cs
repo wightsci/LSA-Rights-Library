@@ -10,7 +10,7 @@ namespace TestRightsApp
             Console.WriteLine("Users with NT Right 'Interactive Logon'");
             Console.WriteLine("=======================================");
             Console.WriteLine();
-            System.Collections.Generic.IList<string> interactivelist = obj.GetAccountsWithRights("SeInteractiveLogonRight");
+            System.Collections.Generic.IList<string> interactivelist = obj.GetAccountsWithRight("SeInteractiveLogonRight");
             for (int x = 0; x < interactivelist.Count; x++)
                 {
                     Console.WriteLine("{0}", interactivelist[x]);
