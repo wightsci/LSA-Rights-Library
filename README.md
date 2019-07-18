@@ -1,5 +1,6 @@
 # LSA-Rights-Library
 [![Build Status](https://dev.azure.com/wightsci/GitHubRepos/_apis/build/status/wightsci.LSA-Rights-Library?branchName=master)](https://dev.azure.com/wightsci/GitHubRepos/_build/latest?definitionId=2&branchName=master)
+
 Windows library to manage LSA rights and privileges. Designed to be used with PowerShell as a binary file or a textual Type within a script.
 Functionality:
 * Add right(s)
