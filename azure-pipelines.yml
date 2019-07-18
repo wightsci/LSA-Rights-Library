@@ -41,6 +41,6 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: 'bin\Release'
+    SourceFolder: 'LSA Rights Library\bin\Release'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
