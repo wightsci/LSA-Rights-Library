@@ -39,6 +39,10 @@ using System.Runtime.InteropServices;
 using System.Security.Principal;
 ...
 ```
+followed by
+```PowerShell
+Add-Type -TypeDefinition $controllerClass
+```
 You can now use ```New-Object``` to create an instance of the ```LocalSecurityAuthorityController``` class:
 ```PowerShell
 $lsa = New-Object LSAController.LocalSecurityAuthorityController
