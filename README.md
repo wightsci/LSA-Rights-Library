@@ -1,6 +1,5 @@
 # LSA-Rights-Library
 [![Build Status](https://dev.azure.com/wightsci/GitHubRepos/_apis/build/status/wightsci.LSA-Rights-Library?branchName=master)](https://dev.azure.com/wightsci/GitHubRepos/_build/latest?definitionId=2&branchName=master)
-
 Windows library to manage LSA rights and privileges. Designed to be used with PowerShell as a binary file or a textual Type within a script.
 Functionality:
 * Add right(s)
@@ -8,7 +7,7 @@ Functionality:
 * List rights
 
 ## Using the binary DLL.
-Download the dll and store it somewhere on your path.
+Build the Visual Studio solution and store the dll somewhere on your path.
 
 In your PowerShell script, add the dll as a type:
 ```PowerShell
