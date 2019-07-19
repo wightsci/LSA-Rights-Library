@@ -59,6 +59,4 @@ steps:
     repositoryName: 'wightsci/LSA-Rights-Library'
     action: 'create'
     target: '$(Build.SourceVersion)'
-    tagSource: 'manual'
-    tag: '$(Build.SourceVersion).a'
     assets: '$(Build.ArtifactStagingDirectory)/LSARightsLibrary.zip'
