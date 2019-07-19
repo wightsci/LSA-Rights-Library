@@ -53,4 +53,4 @@ steps:
     target: '$(Build.SourceVersion)'
     tagSource: 'manual'
     tag: '$(Build.SourceVersion).a'
-    assets: '$(Build.ArtifactStagingDirectory)/LSA Rights Library/bin/release/LSA Rights Library.dll'
+    assets: '$(Build.ArtifactStagingDirectory)\LSA Rights Library.dll'
