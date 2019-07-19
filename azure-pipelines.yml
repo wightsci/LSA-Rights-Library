@@ -50,7 +50,7 @@ steps:
     gitHubConnection: 'wightsci'
     repositoryName: 'wightsci/LSA-Rights-Library'
     action: 'create'
-    target: '$(Build.SourceVersion).a'
+    target: '$(Build.SourceVersion)'
     tagSource: 'manual'
     tag: '$(Build.SourceVersion).a'
     assets: '$(Build.ArtifactStagingDirectory)/LSA Rights Library/bin/release/LSA Rights Libraray.dll'
