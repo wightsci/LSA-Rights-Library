@@ -45,6 +45,14 @@ steps:
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)\LSA Rights Library.dll'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
 - task: GitHubRelease@0
   inputs:
     gitHubConnection: 'wightsci'
@@ -53,4 +61,4 @@ steps:
     target: '$(Build.SourceVersion)'
     tagSource: 'manual'
     tag: '$(Build.SourceVersion).a'
-    assets: '$(Build.ArtifactStagingDirectory)\LSA Rights Library.dll'
+    assets: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
