@@ -4,7 +4,14 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
 trigger:
-- master
+  paths:
+    include:
+      - /
+    exclude:
+      - README.md
+  branches:
+    include:
+      - master
 
 pool:
   vmImage: 'windows-latest'
@@ -31,3 +38,25 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: 'LSA Rights Library\bin\Release'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)\LSA Rights Library.dll'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/LSARightsLibrary.zip'
+    replaceExistingArchive: true
+
+- task: GitHubRelease@0
+  inputs:
+    gitHubConnection: 'wightsci'
+    repositoryName: 'wightsci/LSA-Rights-Library'
+    action: 'create'
+    target: '$(Build.SourceVersion)'
+    assets: '$(Build.ArtifactStagingDirectory)/LSARightsLibrary.zip'

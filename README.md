@@ -8,7 +8,7 @@ Functionality:
 * List rights
 
 ## Using the binary DLL.
-Download the dll and store it somewhere on your path.
+Build the Visual Studio solution and store the dll somewhere on your path.
 
 In your PowerShell script, add the dll as a type:
 ```PowerShell
