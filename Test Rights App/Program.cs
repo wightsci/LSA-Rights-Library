@@ -16,7 +16,6 @@ namespace TestRightsApp
                     Console.WriteLine("{0}", interactivelist[x]);
                 }
             Console.ReadKey();
-            Console.WriteLine();
             Console.WriteLine("NT Rights for the Local Administrators Group");
             Console.WriteLine("============================================");
             Console.WriteLine();
