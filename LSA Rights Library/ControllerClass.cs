@@ -27,6 +27,8 @@ namespace LSAController
         public const string LogonAsBatchJob = "SeBatchLogonRight";
         // Interactive log on right
         public const string InteractiveLogon = "SeInteractiveLogonRight";
+        // Remote Desktop log on right
+        public const string RemoteDesktopLogon = "SeRemoteInteractiveLogonRight";
         // Network log on right
         public const string NetworkLogon = "SeNetworkLogonRight";
         // Generate security audit logs right
@@ -37,9 +39,18 @@ namespace LSAController
         public const string SetTime = "SeSystemtimePrivilege";
         // Remote shutdown right
         public const string RemoteShutdown = "SeRemoteShutdownPrivilege";
+        // Replace a process-level token
+        public const string ReplaceProcessLevelToken = "SeAssignPrimaryTokenPrivilege";
+        // Impersonate a client after authentication
+        public const string ImpersonateClientAfterAuth = "SeImpersonatePrivilege";
+        // Adjust memory quotas for a process
+        public const string IncreaseProcessQuota = "SeIncreaseQuotaPrivilege";
+        // ct as part of the operating system
+        public const string ActAsPartOfOS = "SeTcbPrivilege";
 
 
-
+        // Deny remote Desktop log on right
+        public const string DenyRemoteDesktopLogon = "SeDenyRemoteInteractiveLogonRight";
         // Deny log on as a service right
         public const string DenyLogonAsService = "SeDenyServiceLogonRight";
         // Deny log on as a batch job right
@@ -76,6 +87,10 @@ namespace LSAController
             SeNetworkLogonRight
             SeBatchLogonRight
             SeRemoteInteractiveLogonRight
+            SeAssignPrimaryTokenPrivilege
+            SeImpersonatePrivilege
+            SeIncreaseQuotaPrivilege
+            SeTcbPrivilege
          * 
          */
 
@@ -333,6 +348,9 @@ namespace LSAController
                 {
                     case 1313:
                         errorMessage = "Specified privilege does not exist. (1313)";
+                        break;
+                    case 259:
+                        errorMessage = "No accounts found. (259)";
                         break;
                     default:
                         ;
